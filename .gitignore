@@ -1,0 +1,35 @@
+# Virtual environment
+rag-env/
+
+# Uploaded documents
+data/*
+!data/.gitkeep
+
+# Cached model weights
+models/*
+!models/.gitkeep
+
+# FAISS index files
+vectorstore/*
+!vectorstore/.gitkeep
+
+# Environment variables
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
