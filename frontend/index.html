@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DocuMind-AI — Intelligent Document Assistant</title>
+    <meta name="description" content="Upload documents and ask questions — powered by RAG and AI." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <!-- ============================================================ SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 32 32" fill="none">
+                        <rect x="2" y="4" width="20" height="26" rx="3" stroke="currentColor" stroke-width="2"/>
+                        <rect x="10" y="2" width="20" height="26" rx="3" fill="var(--accent)" opacity="0.3" stroke="currentColor" stroke-width="2"/>
+                        <line x1="15" y1="10" x2="25" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        <line x1="15" y1="15" x2="25" y2="15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        <line x1="15" y1="20" x2="22" y2="20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <h1>DocuMind<span class="accent">-AI</span></h1>
+            </div>
+            <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Upload Zone -->
+        <div class="upload-section">
+            <div class="upload-zone" id="uploadZone">
+                <div class="upload-icon">
+                    <svg viewBox="0 0 48 48" fill="none">
+                        <path d="M24 32V12M24 12L16 20M24 12L32 20" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M8 32V38C8 40.2091 9.79086 42 12 42H36C38.2091 42 40 40.2091 40 38V32" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <p class="upload-text">Drop files here</p>
+                <p class="upload-subtext">PDF, DOCX, TXT</p>
+                <input type="file" id="fileInput" accept=".pdf,.docx,.txt" hidden />
+            </div>
+            <div class="upload-progress" id="uploadProgress">
+                <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+                <p class="progress-text" id="progressText">Uploading…</p>
+            </div>
+        </div>
+
+        <!-- Documents List -->
+        <div class="documents-section">
+            <h3 class="section-title">
+                <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+                    <path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"/>
+                </svg>
+                Documents
+                <span class="doc-count" id="docCount">0</span>
+            </h3>
+            <ul class="doc-list" id="docList">
+                <li class="doc-empty">No documents yet</li>
+            </ul>
+        </div>
+
+        <!-- Footer -->
+        <div class="sidebar-footer">
+            <div class="status-indicator" id="statusIndicator">
+                <span class="status-dot"></span>
+                <span class="status-text">Checking…</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ============================================================ MAIN -->
+    <main class="main" id="main">
+        <!-- Mobile header -->
+        <div class="mobile-header">
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="15" y2="12"/><line x1="3" y1="18" x2="18" y2="18"/>
+                </svg>
+            </button>
+            <span class="mobile-title">DocuMind<span class="accent">-AI</span></span>
+        </div>
+
+        <!-- Chat Area -->
+        <div class="chat-container" id="chatContainer">
+            <!-- Welcome screen -->
+            <div class="welcome" id="welcome">
+                <div class="welcome-icon">
+                    <svg viewBox="0 0 64 64" fill="none">
+                        <circle cx="32" cy="32" r="28" stroke="currentColor" stroke-width="2" opacity="0.3"/>
+                        <circle cx="32" cy="32" r="18" stroke="currentColor" stroke-width="2" opacity="0.5"/>
+                        <circle cx="32" cy="32" r="8" fill="var(--accent)" opacity="0.8"/>
+                        <path d="M32 4V12M32 52V60M4 32H12M52 32H60" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+                    </svg>
+                </div>
+                <h2>Welcome to DocuMind-AI</h2>
+                <p>Upload a document and start asking questions.</p>
+                <div class="welcome-suggestions">
+                    <button class="suggestion" onclick="askSuggestion('What is this document about?')">📄 What is this document about?</button>
+                    <button class="suggestion" onclick="askSuggestion('Summarize the key points')">✨ Summarize the key points</button>
+                    <button class="suggestion" onclick="askSuggestion('What are the main conclusions?')">🎯 What are the main conclusions?</button>
+                </div>
+            </div>
+
+            <!-- Messages will be added here -->
+            <div class="messages" id="messages"></div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="input-area">
+            <div class="input-wrapper">
+                <textarea
+                    id="questionInput"
+                    placeholder="Ask a question about your documents…"
+                    rows="1"
+                    autofocus
+                ></textarea>
+                <button class="send-btn" id="sendBtn" aria-label="Send message">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+            <p class="input-hint">Press <kbd>Enter</kbd> to send · <kbd>Shift+Enter</kbd> for new line</p>
+        </div>
+    </main>
+
+    <!-- Overlay for mobile sidebar -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
