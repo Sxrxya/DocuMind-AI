@@ -137,7 +137,9 @@ async def ask_question_stream(req: AskRequest):
     def event_stream():
         try:
             for token in llm.generate_stream(messages):
-                yield f"data: {token}\n\n"
+                # Encode newlines so they survive SSE (data lines can't contain raw \n)
+                safe_token = token.replace("\n", "\\n")
+                yield f"data: {safe_token}\n\n"
             yield "data: [DONE]\n\n"
         except Exception as e:
             logger.error(f"Stream error: {e}")

@@ -234,10 +234,10 @@ async function handleSend() {
 
             for (const line of lines) {
                 if (line.startsWith("data: ")) {
-                    const data = line.slice(6).trim();
-                    if (data === "[DONE]") continue;
-                    if (data.startsWith("[ERROR]")) {
-                        throw new Error(data.slice(8));
+                    const data = line.slice(6);  // DON'T trim — spaces are meaningful tokens
+                    if (data.trim() === "[DONE]") continue;
+                    if (data.trim().startsWith("[ERROR]")) {
+                        throw new Error(data.trim().slice(8));
                     }
                     fullAnswer += data;
                     updateMessage(assistantId, formatAnswer(fullAnswer));
