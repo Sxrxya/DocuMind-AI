@@ -239,7 +239,9 @@ async function handleSend() {
                     if (data.trim().startsWith("[ERROR]")) {
                         throw new Error(data.trim().slice(8));
                     }
-                    fullAnswer += data;
+                    // Decode escaped newlines from SSE
+                    const decoded = data.replace(/\\n/g, "\n");
+                    fullAnswer += decoded;
                     updateMessage(assistantId, formatAnswer(fullAnswer));
                 }
             }
